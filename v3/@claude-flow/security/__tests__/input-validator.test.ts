@@ -28,6 +28,7 @@ import {
   TaskInputSchema,
   CommandArgumentSchema,
   PathSchema,
+  SpawnAgentSchema,
   PATTERNS,
   LIMITS,
 } from '../src/input-validator.js';
@@ -363,6 +364,43 @@ describe('InputValidator', () => {
 
       const failure = InputValidator.safeParse(EmailSchema, 'invalid');
       expect(failure.success).toBe(false);
+    });
+  });
+
+  describe('SpawnAgentSchema', () => {
+    it('should accept valid agent spawn with agentType field', () => {
+      const result = SpawnAgentSchema.parse({
+        agentType: 'tester',
+      });
+      expect(result.agentType).toBe('tester');
+    });
+
+    it('should accept agentType with optional name and id', () => {
+      const result = SpawnAgentSchema.parse({
+        agentType: 'coder',
+        name: 'my-agent',
+        id: 'agent-001',
+      });
+      expect(result.agentType).toBe('coder');
+      expect(result.name).toBe('my-agent');
+      expect(result.id).toBe('agent-001');
+    });
+
+    it('should reject missing agentType', () => {
+      expect(() => SpawnAgentSchema.parse({})).toThrow();
+    });
+
+    it('should reject invalid agentType', () => {
+      expect(() => SpawnAgentSchema.parse({ agentType: 'not-a-real-type' })).toThrow();
+    });
+
+    it('should accept all known agent types', () => {
+      const types = ['coder', 'reviewer', 'tester', 'planner', 'researcher',
+        'security-architect', 'security-auditor', 'memory-specialist',
+        'queen-coordinator', 'project-coordinator'];
+      for (const t of types) {
+        expect(() => SpawnAgentSchema.parse({ agentType: t })).not.toThrow();
+      }
     });
   });
 

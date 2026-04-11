@@ -260,9 +260,11 @@ export const AgentTypeSchema = z.enum([
 
 /**
  * Agent spawn request schema
+ * Field names match the MCP tool schema in agent-tools.ts (agentType, not type)
  */
 export const SpawnAgentSchema = z.object({
-  type: AgentTypeSchema,
+  agentType: AgentTypeSchema,
+  name: SafeStringSchema.max(200, 'Agent name too long').optional(),
   id: IdentifierSchema.optional(),
   config: z.record(z.unknown()).optional(),
   timeout: z.number().positive().optional(),

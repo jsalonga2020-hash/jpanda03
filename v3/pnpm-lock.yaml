@@ -131,6 +131,9 @@ importers:
       '@claude-flow/plugin-gastown-bridge':
         specifier: ^0.1.3
         version: 0.1.3(@claude-flow/memory@@claude-flow+memory)
+      '@claude-flow/security':
+        specifier: ^3.0.0-alpha.1
+        version: link:../security
       '@ruvector/attention':
         specifier: ^0.1.32
         version: 0.1.32
@@ -5861,6 +5864,8 @@ packages:
     peerDependencies:
       typescript: '>=5.0.0'
     peerDependenciesMeta:
+      agentic-flow:
+        optional: true
       typescript:
         optional: true
     dependencies:
@@ -11016,6 +11021,9 @@ packages:
   /sqlite3@5.1.7:
     resolution: {integrity: sha512-GGIyOiFaG+TUra3JIfkI/zGP8yZYLPQ0pl1bH+ODjiX57sPhrLU5sQJn1y9bDKZUFYkX1crlrPfSYt0BKKdkog==}
     requiresBuild: true
+    peerDependenciesMeta:
+      node-gyp:
+        optional: true
     dependencies:
       bindings: 1.5.0
       node-addon-api: 7.1.1
