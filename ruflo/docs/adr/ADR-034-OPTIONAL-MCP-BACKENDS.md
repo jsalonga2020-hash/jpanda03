@@ -6,7 +6,7 @@
 
 ## Context
 
-ADR-033 added ruvector (61 tools) and ruflo (215 tools) as default MCP backends. Users also want access to additional AI agent capabilities:
+ADR-033 added ruvector (61 tools) and ezra (215 tools) as default MCP backends. Users also want access to additional AI agent capabilities:
 
 - **Claude Code** — Anthropic's coding agent with file editing, bash execution, and code analysis tools
 - **Gemini MCP** — Google's Gemini model with conversation context management, multimodal capabilities
@@ -16,14 +16,14 @@ These require their own API keys and have different resource profiles, so they s
 
 ## Decision
 
-Add three optional MCP backends that can be enabled via environment variables. Unlike ruvector/ruflo (enabled by default), these are **disabled by default** and require explicit API keys.
+Add three optional MCP backends that can be enabled via environment variables. Unlike ruvector/ezra (enabled by default), these are **disabled by default** and require explicit API keys.
 
 ### Backend Configuration
 
 | Backend | Env Toggle | API Key Required | Command | Default |
 |---------|-----------|-----------------|---------|---------|
 | ruvector | `ENABLE_RUVECTOR` | None | `npx ruvector mcp start` | **enabled** |
-| ruflo | `ENABLE_RUFLO` | None | `npx ruflo mcp start` | **enabled** |
+| ezra | `ENABLE_EZRA` | None | `npx ezra mcp start` | **enabled** |
 | Claude Code | `ENABLE_CLAUDE_CODE` | `ANTHROPIC_API_KEY` | `claude mcp serve` | disabled |
 | Gemini MCP | `ENABLE_GEMINI_MCP` | `GOOGLE_API_KEY` | `npx gemini-mcp-server` | disabled |
 | Codex | `ENABLE_CODEX` | `OPENAI_API_KEY` | `npx @openai/codex mcp serve` | disabled |

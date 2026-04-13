@@ -1,4 +1,4 @@
-# ADR-033: RuVector + Ruflo MCP Tool Integration
+# ADR-033: RuVector + Ezra MCP Tool Integration
 
 **Status:** Accepted
 **Date:** 2026-03-04
@@ -6,18 +6,18 @@
 
 ## Context
 
-The MCP bridge initially shipped with 3 built-in tools (search, web_research, system_guide). Users want access to the full ruvector (10 tools) and ruflo (205+ tools) ecosystems from within the HF Chat UI without running separate MCP servers.
+The MCP bridge initially shipped with 3 built-in tools (search, web_research, system_guide). Users want access to the full ruvector (10 tools) and ezra (205+ tools) ecosystems from within the HF Chat UI without running separate MCP servers.
 
 ### Tool Inventory
 
 | Backend | Tools | Categories |
 |---------|-------|------------|
 | **ruvector** | 10 | Intelligence (hooks_stats, hooks_route, hooks_remember, hooks_recall, hooks_init, hooks_pretrain, hooks_build_agents, hooks_verify, hooks_doctor, hooks_export) |
-| **ruflo** | 205+ | Agent (7), Swarm (4), Memory (7), Config (6), Hooks (40+), Task (6), Session (5), Hive-mind (9), Workflow (9), Analyze (4), Progress (4), AIDefence (6), AgentDB (14+) |
+| **ezra** | 205+ | Agent (7), Swarm (4), Memory (7), Config (6), Hooks (40+), Task (6), Session (5), Hive-mind (9), Workflow (9), Analyze (4), Progress (4), AIDefence (6), AgentDB (14+) |
 
 ## Decision
 
-Integrate ruvector and ruflo as **stdio MCP child processes** spawned by the bridge, with tool calls proxied through the existing `/mcp` HTTP endpoint.
+Integrate ruvector and ezra as **stdio MCP child processes** spawned by the bridge, with tool calls proxied through the existing `/mcp` HTTP endpoint.
 
 ### Architecture
 

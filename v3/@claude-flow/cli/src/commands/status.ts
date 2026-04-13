@@ -222,7 +222,7 @@ function displayStatus(status: Awaited<ReturnType<typeof getSystemStatus>>): voi
   const statusIcon = status.running
     ? output.success('[RUNNING]')
     : output.warning('[STOPPED]');
-  output.writeln(`${output.bold('RuFlo V3')} ${statusIcon}`);
+  output.writeln(`${output.bold('Ezra')} ${statusIcon}`);
   output.writeln();
 
   // Swarm section
@@ -343,8 +343,8 @@ const statusAction = async (ctx: CommandContext): Promise<CommandResult> => {
 
   // Check initialization
   if (!isInitialized(cwd)) {
-    output.printError('RuFlo is not initialized in this directory');
-    output.printInfo('Run "ruflo init" to initialize');
+    output.printError('Ezra is not initialized in this directory');
+    output.printInfo('Run "ezra init" to initialize');
     return { success: false, exitCode: 1 };
   }
 

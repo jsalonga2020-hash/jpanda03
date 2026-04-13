@@ -1,5 +1,5 @@
 /**
- * RVFA Runner -- Boot and run self-contained Ruflo appliances.
+ * RVFA Runner -- Boot and run self-contained Ezra appliances.
  *
  * Supports three run modes (cli, mcp, verify) and two isolation
  * strategies (native Node.js, container via Docker).
@@ -124,7 +124,7 @@ export class RvfaRunner {
       const ruflo = tryExtract(this.reader, 'ruflo');
       if (!ruflo) return fail('RVFA appliance does not contain a "ruflo" section');
 
-      const entryFile = join(workDir, 'ruflo-bundle.js');
+      const entryFile = join(workDir, 'ezra-bundle.js');
       await writeFile(entryFile, ruflo);
 
       const env: Record<string, string> = {
@@ -170,7 +170,7 @@ export class RvfaRunner {
 
       const ruflo = tryExtract(this.reader, 'ruflo');
       if (!ruflo) return fail('RVFA appliance does not contain a "ruflo" section');
-      await writeFile(join(workDir, 'ruflo-bundle.js'), ruflo);
+      await writeFile(join(workDir, 'ezra-bundle.js'), ruflo);
 
       const data = tryExtract(this.reader, 'data');
       if (data) await writeFile(join(workDir, 'data.bin'), data);
@@ -182,8 +182,8 @@ export class RvfaRunner {
       const baseImage = this.header.platform === 'alpine' ? 'node:20-alpine' : 'node:20-slim';
       const cmdArgs = this.header.boot.args.map((a) => `, "${a}"`).join('');
       const dockerfile = [
-        `FROM ${baseImage}`, 'WORKDIR /app', 'COPY ruflo-bundle.js .',
-        data ? 'COPY data.bin .' : '', `CMD ["node", "ruflo-bundle.js"${cmdArgs}]`,
+        `FROM ${baseImage}`, 'WORKDIR /app', 'COPY ezra-bundle.js .',
+        data ? 'COPY data.bin .' : '', `CMD ["node", "ezra-bundle.js"${cmdArgs}]`,
       ].filter(Boolean).join('\n');
       await writeFile(join(workDir, 'Dockerfile'), dockerfile);
 

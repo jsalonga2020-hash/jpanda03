@@ -1,4 +1,4 @@
-# ADR-046: Dual Umbrella Packages — claude-flow + ruflo
+# ADR-046: Dual Umbrella Packages — claude-flow + ezra
 
 **Status:** Accepted
 **Date:** 2026-02-07

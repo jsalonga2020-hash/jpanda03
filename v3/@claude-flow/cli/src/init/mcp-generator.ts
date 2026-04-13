@@ -86,6 +86,15 @@ export function generateMCPConfig(options: InitOptions): object {
     );
   }
 
+  // Watchdog security MCP server (optional — requires watchdog-mcp installed)
+  if (config.watchdog) {
+    mcpServers['watchdog'] = createMCPServerEntry(
+      ['watchdog-mcp'],
+      { ...npmEnv },
+      { optional: true }
+    );
+  }
+
   return { mcpServers };
 }
 
@@ -114,6 +123,9 @@ export function generateMCPCommands(options: InitOptions): string[] {
     if (config.flowNexus) {
       commands.push('claude mcp add flow-nexus -- cmd /c npx -y flow-nexus@latest mcp start');
     }
+    if (config.watchdog) {
+      commands.push('claude mcp add watchdog -- cmd /c npx -y watchdog-mcp');
+    }
   } else {
     if (config.claudeFlow) {
       commands.push("claude mcp add claude-flow -- npx -y @claude-flow/cli@latest mcp start");
@@ -123,6 +135,9 @@ export function generateMCPCommands(options: InitOptions): string[] {
     }
     if (config.flowNexus) {
       commands.push("claude mcp add flow-nexus -- npx -y flow-nexus@latest mcp start");
+    }
+    if (config.watchdog) {
+      commands.push("claude mcp add watchdog -- npx watchdog-mcp");
     }
   }
 

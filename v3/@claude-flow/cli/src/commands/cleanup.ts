@@ -1,6 +1,6 @@
 /**
  * V3 CLI Cleanup Command
- * Removes project artifacts created by claude-flow/ruflo
+ * Removes project artifacts created by claude-flow/ezra
  *
  * Created with ruv.io
  */
@@ -83,7 +83,7 @@ function formatSize(bytes: number): string {
  */
 export const cleanupCommand: Command = {
   name: 'cleanup',
-  description: 'Remove project artifacts created by claude-flow/ruflo',
+  description: 'Remove project artifacts created by claude-flow/ezra',
   aliases: ['clean'],
   options: [
     {

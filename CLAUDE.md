@@ -1,4 +1,4 @@
-# Claude Code Configuration - Ruflo v3.5
+# Claude Code Configuration - Ezra (עזרא)
 
 > **Ruflo v3.5** (2026-04-07) — Stable release with verified capabilities.
 > 6,000+ commits, 314 MCP tools, 16 agent roles + custom types, 19 AgentDB controllers.
@@ -874,9 +874,9 @@ memory_search_unified({ query: "authentication security", limit: 5 })
 
 ### Publishing Rules
 
-- MUST publish ALL THREE packages when publishing CLI changes: `@claude-flow/cli`, `claude-flow`, AND `ruflo`
+- MUST publish ALL THREE packages when publishing CLI changes: `@claude-flow/cli`, `claude-flow`, AND `ezra`
 - MUST update ALL dist-tags for ALL THREE packages after publishing
-- Publish order: `@claude-flow/cli` first, then `claude-flow` (umbrella), then `ruflo` (alias umbrella)
+- Publish order: `@claude-flow/cli` first, then `claude-flow` (umbrella), then `ezra` (alias umbrella)
 - MUST run verification for ALL THREE before telling user publishing is complete
 
 ```bash
@@ -896,18 +896,18 @@ npm publish --tag v3alpha
 npm dist-tag add claude-flow@3.0.0-alpha.XXX latest
 npm dist-tag add claude-flow@3.0.0-alpha.XXX alpha
 
-# STEP 4: Publish ruflo umbrella (CRITICAL - DON'T FORGET!)
+# STEP 4: Publish ezra umbrella (CRITICAL - DON'T FORGET!)
 cd /workspaces/claude-flow/ruflo
 npm version 3.0.0-alpha.XXX --no-git-tag-version
 npm publish --tag alpha
-npm dist-tag add ruflo@3.0.0-alpha.XXX latest
+npm dist-tag add ezra-flow@3.0.0-alpha.XXX latest
 ```
 
 **Verification (run before telling user):**
 ```bash
 npm view @claude-flow/cli dist-tags --json
 npm view claude-flow dist-tags --json
-npm view ruflo dist-tags --json
+npm view ezra-flow dist-tags --json
 # ALL THREE packages need: alpha AND latest pointing to newest version
 ```
 
@@ -920,12 +920,12 @@ npm view ruflo dist-tags --json
 | `claude-flow` | `alpha` | `npx claude-flow@alpha` — EASY TO FORGET |
 | `claude-flow` | `latest` | `npx claude-flow@latest` |
 | `claude-flow` | `v3alpha` | `npx claude-flow@v3alpha` |
-| `ruflo` | `alpha` | `npx ruflo@alpha` — EASY TO FORGET |
-| `ruflo` | `latest` | `npx ruflo@latest` |
+| `ezra-flow` | `alpha` | `npx ezra-flow@alpha` — EASY TO FORGET |
+| `ezra-flow` | `latest` | `npx ezra-flow@latest` |
 
-- Never forget the `ruflo` package — it's a thin wrapper users run via `npx ruflo@alpha`
+- Never forget the `ezra-flow` package — it's a thin wrapper users run via `npx ezra-flow@alpha`
 - Never forget the umbrella `alpha` tag — users run `npx claude-flow@alpha`
-- `ruflo` source is in `/ruflo/` — it depends on `@claude-flow/cli`
+- `ezra-flow` source is in `/ruflo/` — it depends on `@claude-flow/cli`
 
 ## Plugin Registry Maintenance (IPFS/Pinata)
 
@@ -1083,6 +1083,21 @@ npx claude-flow@v3alpha plugins publish
 ```
 
 Registry source: IPFS via Pinata (`QmXbfEAaR7D2Ujm4GAkbwcGZQMHqAMpwDoje4583uNP834`)
+
+## Watchdog Security Integration
+
+Ezra can integrate with the Watchdog security platform for real-time threat monitoring.
+To enable, add the Watchdog MCP server:
+
+```bash
+claude mcp add watchdog -- npx watchdog-mcp
+```
+
+Key tools: `watchdog_status`, `watchdog_threats`, `watchdog_scan`, `hub_activate_formation`
+
+Skills: `/watchdog:status` (security dashboard), `/watchdog:defend` (activate formations)
+
+Agent routing: Use agent type `watchdog-security` or routing code 9 for security tasks with Watchdog integration.
 
 ## Support
 

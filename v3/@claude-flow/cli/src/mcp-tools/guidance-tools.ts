@@ -1,7 +1,7 @@
 /**
  * Guidance MCP Tools
  *
- * Helps the system navigate Ruflo's capabilities by providing structured
+ * Helps the system navigate Ezra's capabilities by providing structured
  * discovery of tools, commands, agents, skills, and recommended workflows.
  *
  * @module @claude-flow/cli/mcp-tools/guidance
@@ -360,7 +360,7 @@ function discoverSkills(): string[] {
 
 const guidanceCapabilities: MCPTool = {
   name: 'guidance_capabilities',
-  description: 'List all capability areas with their tools, commands, agents, and skills. Use this to discover what Ruflo can do.',
+  description: 'List all capability areas with their tools, commands, agents, and skills. Use this to discover what Ezra can do.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -603,39 +603,39 @@ const guidanceQuickRef: MCPTool = {
       'getting-started': {
         title: 'Getting Started',
         commands: [
-          { cmd: 'npx ruflo@latest init --wizard', desc: 'Initialize project with interactive setup' },
-          { cmd: 'npx ruflo@latest doctor --fix', desc: 'Run diagnostics and auto-fix issues' },
-          { cmd: 'npx ruflo@latest daemon start', desc: 'Start background workers' },
-          { cmd: 'npx ruflo@latest status', desc: 'Check system status' },
+          { cmd: 'npx ezra-flow@latest init --wizard', desc: 'Initialize project with interactive setup' },
+          { cmd: 'npx ezra-flow@latest doctor --fix', desc: 'Run diagnostics and auto-fix issues' },
+          { cmd: 'npx ezra-flow@latest daemon start', desc: 'Start background workers' },
+          { cmd: 'npx ezra-flow@latest status', desc: 'Check system status' },
         ],
       },
       'daily-dev': {
         title: 'Daily Development',
         commands: [
-          { cmd: 'npx ruflo@latest hooks pre-task --description "..."', desc: 'Get routing recommendation before task' },
-          { cmd: 'npx ruflo@latest hooks post-task --task-id "..." --success true', desc: 'Record task outcome for learning' },
-          { cmd: 'npx ruflo@latest hooks post-edit --file "..." --train-neural true', desc: 'Train patterns from edits' },
-          { cmd: 'npx ruflo@latest memory search --query "..."', desc: 'Search memory for relevant patterns' },
-          { cmd: 'npx ruflo@latest hooks route --task "..."', desc: 'Route task to optimal agent' },
+          { cmd: 'npx ezra-flow@latest hooks pre-task --description "..."', desc: 'Get routing recommendation before task' },
+          { cmd: 'npx ezra-flow@latest hooks post-task --task-id "..." --success true', desc: 'Record task outcome for learning' },
+          { cmd: 'npx ezra-flow@latest hooks post-edit --file "..." --train-neural true', desc: 'Train patterns from edits' },
+          { cmd: 'npx ezra-flow@latest memory search --query "..."', desc: 'Search memory for relevant patterns' },
+          { cmd: 'npx ezra-flow@latest hooks route --task "..."', desc: 'Route task to optimal agent' },
         ],
       },
       'swarm-ops': {
         title: 'Swarm Operations',
         commands: [
-          { cmd: 'npx ruflo@latest swarm init --topology hierarchical --max-agents 8', desc: 'Initialize anti-drift swarm' },
-          { cmd: 'npx ruflo@latest swarm status', desc: 'Check swarm status' },
-          { cmd: 'npx ruflo@latest agent spawn -t coder --name my-coder', desc: 'Spawn a specific agent' },
-          { cmd: 'npx ruflo@latest hive-mind init --strategy byzantine', desc: 'Start hive-mind consensus' },
+          { cmd: 'npx ezra-flow@latest swarm init --topology hierarchical --max-agents 8', desc: 'Initialize anti-drift swarm' },
+          { cmd: 'npx ezra-flow@latest swarm status', desc: 'Check swarm status' },
+          { cmd: 'npx ezra-flow@latest agent spawn -t coder --name my-coder', desc: 'Spawn a specific agent' },
+          { cmd: 'npx ezra-flow@latest hive-mind init --strategy byzantine', desc: 'Start hive-mind consensus' },
         ],
       },
       'memory-ops': {
         title: 'Memory Operations',
         commands: [
-          { cmd: 'npx ruflo@latest memory init --force', desc: 'Initialize memory database' },
-          { cmd: 'npx ruflo@latest memory store --key "k" --value "v" --namespace patterns', desc: 'Store a value' },
-          { cmd: 'npx ruflo@latest memory search --query "auth patterns"', desc: 'Semantic vector search' },
-          { cmd: 'npx ruflo@latest memory list --namespace patterns', desc: 'List entries in namespace' },
-          { cmd: 'npx ruflo@latest memory retrieve --key "k" --namespace patterns', desc: 'Get a specific entry' },
+          { cmd: 'npx ezra-flow@latest memory init --force', desc: 'Initialize memory database' },
+          { cmd: 'npx ezra-flow@latest memory store --key "k" --value "v" --namespace patterns', desc: 'Store a value' },
+          { cmd: 'npx ezra-flow@latest memory search --query "auth patterns"', desc: 'Semantic vector search' },
+          { cmd: 'npx ezra-flow@latest memory list --namespace patterns', desc: 'List entries in namespace' },
+          { cmd: 'npx ezra-flow@latest memory retrieve --key "k" --namespace patterns', desc: 'Get a specific entry' },
         ],
       },
       'github-ops': {
@@ -650,11 +650,11 @@ const guidanceQuickRef: MCPTool = {
       diagnostics: {
         title: 'Diagnostics & Troubleshooting',
         commands: [
-          { cmd: 'npx ruflo@latest doctor --fix', desc: 'Full system diagnostics with auto-fix' },
-          { cmd: 'npx ruflo@latest status --watch', desc: 'Live system monitoring' },
-          { cmd: 'npx ruflo@latest hooks worker status', desc: 'Background worker health' },
-          { cmd: 'npx ruflo@latest performance benchmark --suite all', desc: 'Run all benchmarks' },
-          { cmd: 'npx ruflo@latest hooks progress --detailed', desc: 'V3 implementation progress' },
+          { cmd: 'npx ezra-flow@latest doctor --fix', desc: 'Full system diagnostics with auto-fix' },
+          { cmd: 'npx ezra-flow@latest status --watch', desc: 'Live system monitoring' },
+          { cmd: 'npx ezra-flow@latest hooks worker status', desc: 'Background worker health' },
+          { cmd: 'npx ezra-flow@latest performance benchmark --suite all', desc: 'Run all benchmarks' },
+          { cmd: 'npx ezra-flow@latest hooks progress --detailed', desc: 'V3 implementation progress' },
         ],
       },
     };

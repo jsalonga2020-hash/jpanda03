@@ -1,7 +1,7 @@
 /**
  * RVFA Appliance Builder -- Constructs self-contained .rvf appliance files.
  *
- * Creates a single binary containing kernel, runtime, Ruflo CLI, models/keys,
+ * Creates a single binary containing kernel, runtime, Ezra CLI, models/keys,
  * AgentDB data, and the verification suite. See ADR-058.
  */
 
@@ -126,7 +126,7 @@ export class RvfaBuilder {
     const stages: { id: SectionId; raw: Buffer; label: string }[] = [
       { id: 'kernel',  raw: this.buildKernelSection(),  label: 'Kernel (Alpine rootfs)' },
       { id: 'runtime', raw: this.buildRuntimeSection(), label: 'Runtime (Node.js + Claude Code)' },
-      { id: 'ruflo',   raw: this.buildRufloSection(),   label: 'Ruflo CLI' },
+      { id: 'ruflo',   raw: this.buildRufloSection(),   label: 'Ezra CLI' },
       { id: 'models',  raw: this.buildModelsSection(),  label: `Models (${this.opts.profile})` },
       { id: 'data',    raw: this.buildDataSection(),    label: 'Data (AgentDB)' },
       { id: 'verify',  raw: this.buildVerifySection(),  label: 'Verify (test suite)' },
@@ -176,7 +176,7 @@ export class RvfaBuilder {
     return jsonBuf({
       type: 'kernel', distribution: 'alpine', version: '3.23', arch: this.opts.arch,
       packages: ['busybox', 'dumb-init', 'musl'],
-      init: '/sbin/init -> ruflo-init (PID 1)',
+      init: '/sbin/init -> ezra-init (PID 1)',
       features: ['minimal rootfs', 'read-only root filesystem', 'tmpfs for /tmp and /run', 'seccomp profile applied'],
       sizeTarget: '~5MB compressed',
       note: 'Manifest-only: actual rootfs fetched during full build pipeline',
@@ -289,10 +289,10 @@ export class RvfaBuilder {
       this.log(`    Bundled verify-appliance.sh (${fmtBytes(script.length)})`);
     } else {
       script = Buffer.from([
-        '#!/bin/sh', 'set -e', 'RUFLO_CMD="${RUFLO_CMD:-ruflo}"',
+        '#!/bin/sh', 'set -e', 'EZRA_CMD="${EZRA_CMD:-ezra}"',
         'echo "Running basic verification..."',
-        '$RUFLO_CMD --version && echo "  OK: CLI" || echo "  FAIL: CLI"',
-        '$RUFLO_CMD doctor && echo "  OK: Doctor" || echo "  FAIL: Doctor"',
+        '$EZRA_CMD --version && echo "  OK: CLI" || echo "  FAIL: CLI"',
+        '$EZRA_CMD doctor && echo "  OK: Doctor" || echo "  FAIL: Doctor"',
         'echo "Verification complete."',
       ].join('\n'), 'utf-8');
       this.log('    Using stub verify script (verify-appliance.sh not found)');
@@ -317,7 +317,7 @@ export class RvfaBuilder {
     if (this.opts.profile !== 'offline') caps.push('cloud-api-vault');
 
     const boot: RvfaBootConfig = {
-      entrypoint: '/opt/ruflo/bin/cli.js',
+      entrypoint: '/opt/ezra/bin/cli.js',
       args: ['--profile', this.opts.profile],
       env: { NODE_ENV: 'production', CLAUDE_FLOW_MEMORY_BACKEND: 'hybrid', CLAUDE_FLOW_LOG_LEVEL: 'info' },
       isolation: this.opts.profile === 'cloud' ? 'container' : 'native',
@@ -331,7 +331,7 @@ export class RvfaBuilder {
     };
 
     return {
-      magic: 'RVFA', version: 1, name: 'ruflo-appliance', appVersion: this.opts.rufloVersion,
+      magic: 'RVFA', version: 1, name: 'ezra-appliance', appVersion: this.opts.rufloVersion,
       arch: this.opts.arch, platform: 'linux', profile: this.opts.profile,
       created: new Date().toISOString(), boot, models, capabilities: caps,
     };

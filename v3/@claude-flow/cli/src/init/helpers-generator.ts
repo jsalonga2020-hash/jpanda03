@@ -11,12 +11,12 @@ import { generateStatuslineScript, generateStatuslineHook } from './statusline-g
  */
 export function generatePreCommitHook(): string {
   return `#!/bin/bash
-# Ruflo Pre-Commit Hook
+# Ezra Pre-Commit Hook
 # Validates code quality before commit
 
 set -e
 
-echo "🔍 Running Ruflo pre-commit checks..."
+echo "🔍 Running Ezra pre-commit checks..."
 
 # Get staged files
 STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM)
@@ -44,7 +44,7 @@ echo "✅ Pre-commit checks complete"
  */
 export function generatePostCommitHook(): string {
   return `#!/bin/bash
-# Ruflo Post-Commit Hook
+# Ezra Post-Commit Hook
 # Records commit metrics and trains patterns
 
 COMMIT_HASH=$(git rev-parse HEAD)
@@ -52,8 +52,8 @@ COMMIT_MSG=$(git log -1 --pretty=%B)
 
 echo "📊 Recording commit metrics..."
 
-# Notify ruflo of commit
-npx ruflo@latest hooks notify \\
+# Notify ezra of commit
+npx ezra-flow@latest hooks notify \\
   --message "Commit: $COMMIT_MSG" \\
   --level info \\
   --metadata '{"hash": "'$COMMIT_HASH'"}' 2>/dev/null || true
@@ -68,7 +68,7 @@ echo "✅ Commit recorded"
 export function generateSessionManager(): string {
   return `#!/usr/bin/env node
 /**
- * Ruflo Session Manager
+ * Ezra Session Manager
  * Handles session lifecycle: start, restore, end
  */
 
@@ -202,7 +202,7 @@ module.exports = commands;
 export function generateAgentRouter(): string {
   return `#!/usr/bin/env node
 /**
- * Ruflo Agent Router
+ * Ezra Agent Router
  * Routes tasks to optimal agents based on learned patterns
  */
 
@@ -275,7 +275,7 @@ module.exports = { routeTask, AGENT_CAPABILITIES, TASK_PATTERNS };
 export function generateMemoryHelper(): string {
   return `#!/usr/bin/env node
 /**
- * Ruflo Memory Helper
+ * Ezra Memory Helper
  * Simple key-value memory for cross-session context
  */
 
@@ -369,7 +369,7 @@ export function generateHookHandler(): string {
   const lines = [
     '#!/usr/bin/env node',
     '/**',
-    ' * Ruflo Hook Handler (Cross-Platform)',
+    ' * Ezra Hook Handler (Cross-Platform)',
     ' * Dispatches hook events to the appropriate helper modules.',
     ' */',
     '',
@@ -848,7 +848,7 @@ if (!existsSync(DATA_DIR)) mkdirSync(DATA_DIR, { recursive: true });
 
 async function loadMemoryPackage() {
   // Strategy 1: Use createRequire for CJS-style resolution (handles nested node_modules
-  // when installed as a transitive dependency via npx ruflo / npx claude-flow)
+  // when installed as a transitive dependency via npx ezra-flow / npx claude-flow)
   try {
     const { createRequire } = await import('module');
     const require = createRequire(join(PROJECT_ROOT, 'package.json'));
@@ -934,7 +934,7 @@ process.exit(0);
  * Generate Windows PowerShell daemon manager
  */
 export function generateWindowsDaemonManager(): string {
-  return `# RuFlo V3 Daemon Manager for Windows
+  return `# Ezra Daemon Manager for Windows
 # PowerShell script for managing background processes
 
 param(
@@ -1000,7 +1000,7 @@ function Stop-SwarmMonitor {
 
 function Show-Status {
     Write-Host ""
-    Write-Host "RuFlo V3 Daemon Status" -ForegroundColor Cyan
+    Write-Host "Ezra Daemon Status" -ForegroundColor Cyan
     Write-Host "=============================" -ForegroundColor Cyan
 
     $swarmPid = Join-Path $PidDir 'swarm-monitor.pid'
@@ -1041,7 +1041,7 @@ switch ($Action) {
  */
 export function generateWindowsBatchWrapper(): string {
   return `@echo off
-REM RuFlo V3 - Windows Batch Wrapper
+REM Ezra - Windows Batch Wrapper
 REM Routes to PowerShell daemon manager
 
 PowerShell -ExecutionPolicy Bypass -File "%~dp0daemon-manager.ps1" %*
@@ -1054,7 +1054,7 @@ PowerShell -ExecutionPolicy Bypass -File "%~dp0daemon-manager.ps1" %*
 export function generateCrossPlatformSessionManager(): string {
   return `#!/usr/bin/env node
 /**
- * Ruflo Cross-Platform Session Manager
+ * Ezra Cross-Platform Session Manager
  * Works on Windows, macOS, and Linux
  */
 

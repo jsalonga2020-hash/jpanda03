@@ -11,6 +11,7 @@
  */
 
 import { EventEmitter } from 'events';
+import { exec } from 'child_process';
 import {
   ILLMProvider,
   LLMProvider,
@@ -58,12 +59,22 @@ interface ProviderMetrics {
 /**
  * Provider Manager - Orchestrates multiple LLM providers
  */
+/** SynthLang compression configuration for ezra */
+export interface SynthLangConfig {
+  enabled: boolean;
+  /** Minimum message length (chars) to compress (default: 200) */
+  minLength?: number;
+  /** Log compression metrics (default: true) */
+  logMetrics?: boolean;
+}
+
 export class ProviderManager extends EventEmitter {
   private providers: Map<LLMProvider, ILLMProvider> = new Map();
   private cache: Map<string, CacheEntry> = new Map();
   private metrics: Map<LLMProvider, ProviderMetrics> = new Map();
   private roundRobinIndex = 0;
   private logger: ILogger;
+  private synthlangConfig: SynthLangConfig = { enabled: false };
 
   constructor(
     private config: ProviderManagerConfig,
@@ -71,6 +82,64 @@ export class ProviderManager extends EventEmitter {
   ) {
     super();
     this.logger = logger || consoleLogger;
+  }
+
+  /** Enable SynthLang prompt compression for all providers */
+  setSynthLangConfig(config: SynthLangConfig): void {
+    this.synthlangConfig = config;
+    this.logger.info('SynthLang compression configured', { enabled: config.enabled });
+  }
+
+  /**
+   * Compress user messages in a request using SynthLang.
+   * Only compresses text content from user messages above the minimum length.
+   * Returns a new request object — does not mutate the original.
+   */
+  private async compressRequest(request: LLMRequest): Promise<LLMRequest> {
+    if (!this.synthlangConfig.enabled) return request;
+    const minLen = this.synthlangConfig.minLength ?? 200;
+
+    const compressedMessages = await Promise.all(
+      request.messages.map(async (msg) => {
+        // Only compress user messages with string content
+        if (msg.role !== 'user' || typeof msg.content !== 'string') return msg;
+        if (msg.content.length < minLen) return msg;
+
+        try {
+          const compressed = await this.runSynthLangCli(msg.content);
+          if (this.synthlangConfig.logMetrics) {
+            const reduction = Math.round((1 - compressed.length / msg.content.length) * 100);
+            this.logger.debug('SynthLang compression', {
+              originalLen: msg.content.length,
+              compressedLen: compressed.length,
+              reductionPercent: reduction,
+            });
+          }
+          return { ...msg, content: compressed };
+        } catch {
+          // Non-fatal — use original
+          return msg;
+        }
+      })
+    );
+
+    return { ...request, messages: compressedMessages };
+  }
+
+  private runSynthLangCli(text: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const escaped = text.replace(/"/g, '\\"').replace(/\n/g, '\\n');
+      exec(
+        `synthlang translate --source "${escaped}" --framework synthlang`,
+        { timeout: 15000, maxBuffer: 1024 * 1024 },
+        (error, stdout, stderr) => {
+          if (error) return reject(new Error(stderr || error.message));
+          const out = stdout.trim();
+          if (!out) return reject(new Error('Empty SynthLang output'));
+          resolve(out);
+        }
+      );
+    });
   }
 
   /**
@@ -136,11 +205,14 @@ export class ProviderManager extends EventEmitter {
    * Complete a request with automatic provider selection
    */
   async complete(request: LLMRequest, preferredProvider?: LLMProvider): Promise<LLMResponse> {
+    // SynthLang prompt compression (before cache check — compressed prompts cache better)
+    const effectiveRequest = await this.compressRequest(request);
+
     // Check cache first
     if (this.config.cache?.enabled) {
-      const cached = this.getCached(request);
+      const cached = this.getCached(effectiveRequest);
       if (cached) {
-        this.logger.debug('Cache hit', { requestId: request.requestId });
+        this.logger.debug('Cache hit', { requestId: effectiveRequest.requestId });
         return cached;
       }
     }
@@ -148,7 +220,7 @@ export class ProviderManager extends EventEmitter {
     // Select provider
     const provider = preferredProvider
       ? this.providers.get(preferredProvider)
-      : await this.selectProvider(request);
+      : await this.selectProvider(effectiveRequest);
 
     if (!provider) {
       throw new Error('No available providers');
@@ -157,12 +229,12 @@ export class ProviderManager extends EventEmitter {
     const startTime = Date.now();
 
     try {
-      const response = await provider.complete(request);
+      const response = await provider.complete(effectiveRequest);
       this.updateMetrics(provider.name, Date.now() - startTime, false, response.cost?.totalCost || 0);
 
       // Cache response
       if (this.config.cache?.enabled) {
-        this.setCached(request, response);
+        this.setCached(effectiveRequest, response);
       }
 
       this.emit('complete', { provider: provider.name, response });
@@ -172,7 +244,7 @@ export class ProviderManager extends EventEmitter {
 
       // Try fallback
       if (this.config.fallback?.enabled && isLLMProviderError(error)) {
-        return this.completWithFallback(request, provider.name, error);
+        return this.completWithFallback(effectiveRequest, provider.name, error);
       }
 
       throw error;

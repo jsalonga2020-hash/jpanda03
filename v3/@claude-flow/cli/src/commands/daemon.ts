@@ -536,7 +536,7 @@ const statusCommand: Command = {
           `Max CPU Load: ${status.config.resourceThresholds.maxCpuLoad}`,
           `Min Free Memory: ${status.config.resourceThresholds.minFreeMemoryPercent}%`,
         ].filter(Boolean).join('\n'),
-        'RuFlo Daemon'
+        'Ezra Daemon'
       );
 
       output.writeln();
@@ -616,7 +616,7 @@ const statusCommand: Command = {
           '',
           'Run "claude-flow daemon start" to start the daemon',
         ].join('\n'),
-        'RuFlo Daemon'
+        'Ezra Daemon'
       );
 
       return { success: true };
@@ -751,7 +751,7 @@ export const daemonCommand: Command = {
   ],
   action: async (): Promise<CommandResult> => {
     output.writeln();
-    output.writeln(output.bold('RuFlo Daemon - Background Task Management'));
+    output.writeln(output.bold('Ezra Daemon - Background Task Management'));
     output.writeln();
     output.writeln('Node.js-based background worker system that auto-runs like shell daemons.');
     output.writeln('Manages 12 specialized workers for continuous optimization and monitoring.');

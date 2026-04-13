@@ -77,6 +77,10 @@ const SKILLS_MAP: Record<string, string[]> = {
     'v3-security-overhaul',
     'v3-swarm-coordination',
   ],
+  watchdog: [
+    'watchdog-status',
+    'watchdog-defend',
+  ],
 };
 
 /**
@@ -488,7 +492,7 @@ export async function executeUpgrade(targetDir: string, upgradeSettings = false)
         ddd: { progress: 0, modules: 0, totalFiles: 0, totalLines: 0 },
         swarm: { activeAgents: 0, maxAgents: 15, topology: 'hierarchical-mesh' },
         learning: { status: 'READY', patternsLearned: 0, sessionsCompleted: 0 },
-        _note: 'Metrics will update as you use Ruflo'
+        _note: 'Metrics will update as you use Ezra'
       };
       fs.writeFileSync(progressPath, JSON.stringify(progress, null, 2), 'utf-8');
       result.created.push('.claude-flow/metrics/v3-progress.json');
@@ -520,7 +524,7 @@ export async function executeUpgrade(targetDir: string, upgradeSettings = false)
         routing: { accuracy: 0, decisions: 0 },
         patterns: { shortTerm: 0, longTerm: 0, quality: 0 },
         sessions: { total: 0, current: null },
-        _note: 'Intelligence grows as you use Ruflo'
+        _note: 'Intelligence grows as you use Ezra'
       };
       fs.writeFileSync(learningPath, JSON.stringify(learning, null, 2), 'utf-8');
       result.created.push('.claude-flow/metrics/learning.json');
@@ -744,7 +748,7 @@ async function writeSettings(
         merged = true;
       }
 
-      // Merge permissions (add ruflo allow rules)
+      // Merge permissions (add ezra allow rules)
       if (generated.permissions?.allow) {
         const existingAllow = existing.permissions?.allow || [];
         const newRules = generated.permissions.allow.filter(
@@ -1196,7 +1200,7 @@ async function writeRuntimeConfig(
     return;
   }
 
-  const config = `# RuFlo V3 Runtime Configuration
+  const config = `# Ezra Runtime Configuration
 # Generated: ${new Date().toISOString()}
 
 version: "3.0.0"
@@ -1311,7 +1315,7 @@ async function writeInitialMetrics(
         patternsLearned: 0,
         sessionsCompleted: 0
       },
-      _note: 'Metrics will update as you use Ruflo. Run: npx ruflo@latest daemon start'
+      _note: 'Metrics will update as you use Ezra. Run: npx ezra-flow@latest daemon start'
     };
     fs.writeFileSync(progressPath, JSON.stringify(progress, null, 2), 'utf-8');
     result.created.files.push('.claude-flow/metrics/v3-progress.json');
@@ -1360,7 +1364,7 @@ async function writeInitialMetrics(
         total: 0,
         current: null
       },
-      _note: 'Intelligence grows as you use Ruflo'
+      _note: 'Intelligence grows as you use Ezra'
     };
     fs.writeFileSync(learningPath, JSON.stringify(learning, null, 2), 'utf-8');
     result.created.files.push('.claude-flow/metrics/learning.json');
@@ -1383,7 +1387,7 @@ async function writeInitialMetrics(
 }
 
 /**
- * Write CAPABILITIES.md - comprehensive overview of all Ruflo features
+ * Write CAPABILITIES.md - comprehensive overview of all Ezra features
  */
 async function writeCapabilitiesDoc(
   targetDir: string,
@@ -1397,7 +1401,7 @@ async function writeCapabilitiesDoc(
     return;
   }
 
-  const capabilities = `# RuFlo V3 - Complete Capabilities Reference
+  const capabilities = `# Ezra - Complete Capabilities Reference
 > Generated: ${new Date().toISOString()}
 > Full documentation: https://github.com/ruvnet/claude-flow
 
@@ -1417,7 +1421,7 @@ async function writeCapabilitiesDoc(
 
 ## Overview
 
-RuFlo V3 is a domain-driven design architecture for multi-agent AI coordination with:
+Ezra is a domain-driven design architecture for multi-agent AI coordination with:
 
 - **15-Agent Swarm Coordination** with hierarchical and mesh topologies
 - **HNSW Vector Search** - 150x-12,500x faster pattern retrieval
@@ -1744,16 +1748,18 @@ npx @claude-flow/cli@latest hive-mind consensus --propose "task"
 |---------|---------|
 | ruv-swarm | \`npx ruv-swarm mcp start\` |
 | flow-nexus | \`npx flow-nexus@latest mcp start\` |
+| watchdog-mcp | \`npx watchdog-mcp\` |
 | agentic-jujutsu | \`npx agentic-jujutsu@latest\` |
 
 ### MCP Server Setup
 \`\`\`bash
-# Add Ruflo MCP
-claude mcp add ruflo -- npx -y ruflo@latest
+# Add Ezra MCP
+claude mcp add ezra -- npx -y ezra-flow@latest
 
 # Optional servers
 claude mcp add ruv-swarm -- npx -y ruv-swarm mcp start
 claude mcp add flow-nexus -- npx -y flow-nexus@latest mcp start
+claude mcp add watchdog -- npx watchdog-mcp
 \`\`\`
 
 ---
@@ -1763,24 +1769,24 @@ claude mcp add flow-nexus -- npx -y flow-nexus@latest mcp start
 ### Essential Commands
 \`\`\`bash
 # Setup
-npx ruflo@latest init --wizard
-npx ruflo@latest daemon start
-npx ruflo@latest doctor --fix
+npx ezra-flow@latest init --wizard
+npx ezra-flow@latest daemon start
+npx ezra-flow@latest doctor --fix
 
 # Swarm
-npx ruflo@latest swarm init --topology hierarchical --max-agents 8
-npx ruflo@latest swarm status
+npx ezra-flow@latest swarm init --topology hierarchical --max-agents 8
+npx ezra-flow@latest swarm status
 
 # Agents
-npx ruflo@latest agent spawn -t coder
-npx ruflo@latest agent list
+npx ezra-flow@latest agent spawn -t coder
+npx ezra-flow@latest agent list
 
 # Memory
-npx ruflo@latest memory search --query "patterns"
+npx ezra-flow@latest memory search --query "patterns"
 
 # Hooks
-npx ruflo@latest hooks pre-task --description "task"
-npx ruflo@latest hooks worker dispatch --trigger optimize
+npx ezra-flow@latest hooks pre-task --description "task"
+npx ezra-flow@latest hooks worker dispatch --trigger optimize
 \`\`\`
 
 ### File Structure
@@ -1827,15 +1833,15 @@ async function writeClaudeMd(
     result.created.files.push('CLAUDE.md');
   }
 
-  // Also write/append global ~/.claude/CLAUDE.md so ruflo tools are used automatically (#1497)
+  // Also write/append global ~/.claude/CLAUDE.md so ezra tools are used automatically (#1497)
   const homeDir = process.env.HOME || process.env.USERPROFILE || '';
   if (homeDir) {
     const globalClaudeDir = path.join(homeDir, '.claude');
     const globalClaudeMd = path.join(globalClaudeDir, 'CLAUDE.md');
-    const rufloBlock = [
+    const ezraBlock = [
       '',
-      '# Ruflo Integration (auto-generated by ruflo init)',
-      'When working on multi-file tasks or complex features, use ToolSearch to find and invoke ruflo MCP tools.',
+      '# Ezra Integration (auto-generated by ezra init)',
+      'When working on multi-file tasks or complex features, use ToolSearch to find and invoke ezra MCP tools.',
       'Key tools: memory_store, memory_search, hooks_route, swarm_init, agent_spawn.',
       'Check system-reminder tags for [INTELLIGENCE] pattern suggestions before starting work.',
       '',
@@ -1847,12 +1853,12 @@ async function writeClaudeMd(
       }
       if (fs.existsSync(globalClaudeMd)) {
         const existing = fs.readFileSync(globalClaudeMd, 'utf-8');
-        if (!existing.includes('Ruflo Integration')) {
-          fs.appendFileSync(globalClaudeMd, rufloBlock);
-          result.created.files.push('~/.claude/CLAUDE.md (appended ruflo block)');
+        if (!existing.includes('Ezra Integration')) {
+          fs.appendFileSync(globalClaudeMd, ezraBlock);
+          result.created.files.push('~/.claude/CLAUDE.md (appended ezra block)');
         }
       } else {
-        fs.writeFileSync(globalClaudeMd, rufloBlock.trimStart(), 'utf-8');
+        fs.writeFileSync(globalClaudeMd, ezraBlock.trimStart(), 'utf-8');
         result.created.files.push('~/.claude/CLAUDE.md');
       }
     } catch {

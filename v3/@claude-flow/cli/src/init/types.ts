@@ -170,6 +170,8 @@ export interface MCPConfig {
   ruvSwarm: boolean;
   /** Include flow-nexus MCP server */
   flowNexus: boolean;
+  /** Include watchdog security MCP server */
+  watchdog: boolean;
   /** Auto-start MCP server */
   autoStart: boolean;
   /** Server port */
@@ -391,6 +393,7 @@ export const DEFAULT_INIT_OPTIONS: InitOptions = {
     claudeFlow: true,
     ruvSwarm: false,
     flowNexus: false,
+    watchdog: false,
     autoStart: false,
     port: 3000,
   },
@@ -522,6 +525,7 @@ export const FULL_INIT_OPTIONS: InitOptions = {
     claudeFlow: true,
     ruvSwarm: true,
     flowNexus: true,
+    watchdog: false,
     autoStart: false,
     port: 3000,
   },

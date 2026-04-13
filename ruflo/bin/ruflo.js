@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Ruflo CLI - thin wrapper around @claude-flow/cli with ruflo branding
+// Ezra CLI - thin wrapper around @claude-flow/cli with ezra branding
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, resolve, join } from 'node:path';
 import { existsSync } from 'node:fs';
@@ -37,11 +37,11 @@ const isMCPMode = !process.stdin.isTTY && (process.argv.length === 2 || isExplic
 if (isMCPMode) {
   await import(toImportURL(join(cliBase, 'bin', 'cli.js')));
 } else {
-  // CLI mode: use ruflo branding
+  // CLI mode: use ezra branding
   const { CLI } = await import(toImportURL(join(cliBase, 'dist', 'src', 'index.js')));
   const cli = new CLI({
-    name: 'ruflo',
-    description: 'Ruflo - AI Agent Orchestration Platform',
+    name: 'ezra',
+    description: 'Ezra - AI Agent Orchestration Platform',
   });
   cli.run().catch((error) => {
     console.error('Fatal error:', error.message);

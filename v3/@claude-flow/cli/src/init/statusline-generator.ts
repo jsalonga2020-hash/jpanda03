@@ -15,7 +15,7 @@ import type { InitOptions } from './types.js';
 /**
  * Generate optimized statusline script
  * Output format:
- * ▊ RuFlo V3.5 ● user  │  ⎇ branch  │  Opus 4.6 (1M context)
+ * ▊ Ezra ● user  │  ⎇ branch  │  Opus 4.6 (1M context)
  * ─────────────────────────────────────────────────────
  * 🏗️  DDD Domains    [●●○○○]  2/5    ⚡ HNSW 150x
  * 🤖 Swarm  ◉ [ 5/15]  👥 2    🪝 10/17    🟢 CVE 3/3    💾 4MB    🧠  63%
@@ -27,7 +27,7 @@ export function generateStatuslineScript(options: InitOptions): string {
 
   return `#!/usr/bin/env node
 /**
- * RuFlo V3 Statusline Generator (Optimized)
+ * Ezra Statusline Generator (Optimized)
  * Displays real-time V3 implementation progress and system status
  *
  * Usage: node statusline.cjs [--json] [--compact]
@@ -871,7 +871,7 @@ export function generateStatuslineHook(options: InitOptions): string {
   }
 
   return `#!/bin/bash
-# RuFlo V3 Statusline Hook
+# Ezra Statusline Hook
 # Source this in your .bashrc/.zshrc for terminal statusline
 
 # Function to get statusline

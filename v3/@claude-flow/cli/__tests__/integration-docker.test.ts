@@ -1,7 +1,7 @@
 /**
  * Integration Docker Validation Tests
  *
- * Validates the RuFlo Docker-based deployment stack without running Docker.
+ * Validates the Ezra Docker-based deployment stack without running Docker.
  * Checks docker-compose.yml, nginx.conf, MCP bridge source, CLI Dockerfile,
  * and CLI build/init/doctor commands for correctness.
  *
@@ -231,7 +231,7 @@ describe('Nginx Configuration', () => {
   });
 
   it('injects RuFlo welcome.js script via sub_filter', () => {
-    expect(nginxContent).toMatch(/sub_filter\s+'<\/head>'\s+'<script src="\/ruflo\/welcome\.js"/);
+    expect(nginxContent).toMatch(/sub_filter\s+'<\/head>'\s+'<script src="\/ezra\/welcome\.js"/);
   });
 
   it('has sub_filter_once off for multiple replacements', () => {
@@ -249,8 +249,8 @@ describe('Nginx Configuration', () => {
     expect(nginxContent).toContain('alias /etc/nginx/static/');
   });
 
-  it('serves /ruflo/ static assets from /etc/nginx/static/', () => {
-    expect(nginxContent).toMatch(/location\s+\/ruflo\//);
+  it('serves /ezra/ static assets from /etc/nginx/static/', () => {
+    expect(nginxContent).toMatch(/location\s+\/ezra\//);
   });
 
   it('rewrites localhost:3000 URLs to relative paths via sub_filter', () => {
@@ -428,7 +428,7 @@ describe('MCP Bridge Dockerfile', () => {
 // 6. CLI Dockerfile Validation
 // ---------------------------------------------------------------------------
 
-describe('CLI Dockerfile (ruflo:lite)', () => {
+describe('CLI Dockerfile (ezra:lite)', () => {
   let dockerContent: string;
 
   beforeAll(() => {
@@ -455,8 +455,8 @@ describe('CLI Dockerfile (ruflo:lite)', () => {
     expect(dockerContent).toMatch(/FROM\s+node:22-alpine\s+AS\s+production/);
   });
 
-  it('installs ruflo globally in the build stage', () => {
-    expect(dockerContent).toContain('npm install -g ruflo@latest');
+  it('installs ezra globally in the build stage', () => {
+    expect(dockerContent).toContain('npm install -g ezra-flow@latest');
   });
 
   it('prunes heavy optional dependencies to reduce image size', () => {
@@ -469,10 +469,10 @@ describe('CLI Dockerfile (ruflo:lite)', () => {
     }
   });
 
-  it('creates a non-root user (ruflo)', () => {
+  it('creates a non-root user (ezra)', () => {
     expect(dockerContent).toContain('adduser');
-    expect(dockerContent).toContain('ruflo');
-    expect(dockerContent).toContain('USER ruflo');
+    expect(dockerContent).toContain('ezra');
+    expect(dockerContent).toContain('USER ezra');
   });
 
   it('installs dumb-init for PID 1 signal handling', () => {
@@ -484,13 +484,13 @@ describe('CLI Dockerfile (ruflo:lite)', () => {
     expect(dockerContent).toContain('NODE_ENV=production');
   });
 
-  it('has a HEALTHCHECK using ruflo doctor', () => {
+  it('has a HEALTHCHECK using ezra doctor', () => {
     expect(dockerContent).toContain('HEALTHCHECK');
-    expect(dockerContent).toContain('ruflo doctor');
+    expect(dockerContent).toContain('ezra doctor');
   });
 
   it('default CMD starts MCP server', () => {
-    expect(dockerContent).toContain('CMD ["ruflo", "mcp", "start"]');
+    expect(dockerContent).toContain('CMD ["ezra", "mcp", "start"]');
   });
 });
 
@@ -649,7 +649,7 @@ describe('Security Checks', () => {
 
   it('CLI Dockerfile runs as non-root', () => {
     const dockerfile = readFile(CLI_DOCKERFILE);
-    expect(dockerfile).toContain('USER ruflo');
+    expect(dockerfile).toContain('USER ezra');
   });
 
   it('nginx CORS allows all origins (expected for development)', () => {

@@ -1,6 +1,6 @@
 /**
  * RVFA (RuVector Format Appliance) — Binary format reader/writer
- * for self-contained Ruflo appliances.
+ * for self-contained Ezra appliances.
  *
  * Binary layout:
  *   [4B magic "RVFA"] [4B version u32LE] [4B header_len u32LE]
@@ -129,7 +129,7 @@ export function createDefaultHeader(
     created: new Date().toISOString(),
     sections: [],
     boot: {
-      entrypoint: '/opt/ruflo/bin/ruflo',
+      entrypoint: '/opt/ezra/bin/ezra',
       args: ['--appliance'],
       env: {},
       isolation: profile === 'cloud' ? 'container' : 'native',

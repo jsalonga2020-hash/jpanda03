@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * RuFlo V3.5 Statusline Generator
+ * Ezra V3.5 Statusline Generator
  * Displays real-time V3 implementation progress and system status
  *
  * Usage: node statusline.cjs [options]
@@ -404,7 +404,7 @@ function generateStatusline() {
   const lines = [];
 
   // Header Line
-  let header = `${c.bold}${c.brightPurple}▊ RuFlo V3.5 ${c.reset}`;
+  let header = `${c.bold}${c.brightPurple}▊ Ezra V3.5 ${c.reset}`;
   header += `${swarm.coordinationActive ? c.brightCyan : c.dim}● ${c.brightCyan}${user.name}${c.reset}`;
   if (user.gitBranch) {
     header += `  ${c.dim}│${c.reset}  ${c.brightBlue}⎇ ${user.gitBranch}${c.reset}`;
@@ -486,7 +486,7 @@ function generateSingleLine() {
   const securityStatus = security.status === 'CLEAN' ? '✓' :
                          security.cvesFixed > 0 ? '~' : '✗';
 
-  return `${c.brightPurple}RuFlo${c.reset} ${c.dim}|${c.reset} ` +
+  return `${c.brightPurple}Ezra${c.reset} ${c.dim}|${c.reset} ` +
     `${c.cyan}D:${progress.domainsCompleted}/${progress.totalDomains}${c.reset} ${c.dim}|${c.reset} ` +
     `${c.yellow}S:${swarmIndicator}${swarm.activeAgents}/${swarm.maxAgents}${c.reset} ${c.dim}|${c.reset} ` +
     `${security.status === 'CLEAN' ? c.green : c.red}CVE:${securityStatus}${security.cvesFixed}/${security.totalCves}${c.reset} ${c.dim}|${c.reset} ` +
@@ -510,7 +510,7 @@ function generateSafeStatusline() {
   const lines = [];
 
   // Header Line
-  let header = `${c.bold}${c.brightPurple}▊ RuFlo V3.5 ${c.reset}`;
+  let header = `${c.bold}${c.brightPurple}▊ Ezra V3.5 ${c.reset}`;
   header += `${swarm.coordinationActive ? c.brightCyan : c.dim}● ${c.brightCyan}${user.name}${c.reset}`;
   if (user.gitBranch) {
     header += `  ${c.dim}│${c.reset}  ${c.brightBlue}⎇ ${user.gitBranch}${c.reset}`;
