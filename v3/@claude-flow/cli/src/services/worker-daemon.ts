@@ -364,7 +364,7 @@ export class WorkerDaemon extends EventEmitter {
           if (this.runningWorkers.size === 0) {
             // No workers running means nobody will trigger the finally-block
             // callback, so schedule a backoff retry to avoid a stuck queue.
-            setTimeout(() => this.processPendingWorkers(), 30_000).unref();
+            setTimeout(() => this.processPendingWorkers(), 30_000); // must not .unref() — keeps event loop alive when all workers are resource-deferred (#1478 Bug 3)
           }
           break;
         }
@@ -458,6 +458,12 @@ export class WorkerDaemon extends EventEmitter {
     try {
       const pid = parseInt(readFileSync(this.pidFile, 'utf-8').trim(), 10);
       if (isNaN(pid)) return null;
+      // If the PID file contains our own PID, the parent wrote it pre-emptively
+      // before we finished initializing — treat as "no existing daemon" (#1478 Bug 2).
+      if (pid === process.pid) {
+        try { unlinkSync(this.pidFile); } catch { /* ignore */ }
+        return null;
+      }
       // Check if process is alive (signal 0 = existence check)
       process.kill(pid, 0);
       return pid; // Process is alive
