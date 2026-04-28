@@ -271,6 +271,11 @@ const installCommand: Command = {
         const discovery = createPluginDiscoveryService();
         const registryResult = await discovery.discoverRegistry(registryName);
 
+        if (registryResult.isDemoMode) {
+          spinner.fail(`Cannot install: registry is in demo/fallback mode (no verified registry available). Ensure IPFS registry is reachable.`);
+          return { success: false, exitCode: 1 };
+        }
+
         if (registryResult.success && registryResult.registry) {
           plugin = registryResult.registry.plugins.find(p => p.name === name || p.id === name);
         }
@@ -279,7 +284,6 @@ const installCommand: Command = {
           spinner.setText(`Found ${plugin.displayName} v${plugin.version}`);
         }
 
-        // Install from npm (since IPFS is demo mode)
         spinner.setText(`Installing ${name} from npm...`);
         result = await manager.installFromNpm(name, version !== 'latest' ? version : undefined);
       }

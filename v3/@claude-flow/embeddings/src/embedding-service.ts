@@ -198,6 +198,28 @@ abstract class BaseEmbeddingService extends EventEmitter implements IEmbeddingSe
 // OpenAI Embedding Service
 // ============================================================================
 
+const ALLOWED_EMBEDDING_HOSTS = new Set([
+  'api.openai.com',
+  'api.anthropic.com',
+  'generativelanguage.googleapis.com',
+  'api.cohere.ai',
+  'api-inference.huggingface.co',
+]);
+
+function validateEmbeddingURL(url: string): string {
+  const parsed = new URL(url);
+  if (parsed.protocol !== 'https:') {
+    throw new Error(`Embedding service requires HTTPS, got: ${parsed.protocol}`);
+  }
+  if (!ALLOWED_EMBEDDING_HOSTS.has(parsed.hostname)) {
+    throw new Error(
+      `Embedding service URL not in allowlist: ${parsed.hostname}. ` +
+      `Allowed: ${[...ALLOWED_EMBEDDING_HOSTS].join(', ')}`
+    );
+  }
+  return url;
+}
+
 export class OpenAIEmbeddingService extends BaseEmbeddingService {
   readonly provider: EmbeddingProvider = 'openai';
   private readonly apiKey: string;
@@ -210,7 +232,7 @@ export class OpenAIEmbeddingService extends BaseEmbeddingService {
     super(config);
     this.apiKey = config.apiKey;
     this.model = config.model ?? 'text-embedding-3-small';
-    this.baseURL = config.baseURL ?? 'https://api.openai.com/v1/embeddings';
+    this.baseURL = validateEmbeddingURL(config.baseURL ?? 'https://api.openai.com/v1/embeddings');
     this.timeout = config.timeout ?? 30000;
     this.maxRetries = config.maxRetries ?? 3;
   }
