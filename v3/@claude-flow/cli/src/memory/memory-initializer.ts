@@ -1491,6 +1491,25 @@ interface EmbeddingModel {
 
 let embeddingModelState: EmbeddingModel | null = null;
 
+function _writeEmbeddingProviderFile(modelName: string, dimensions: number): void {
+  try {
+    const swarmDir = path.join(process.cwd(), '.swarm');
+    if (!fs.existsSync(swarmDir)) fs.mkdirSync(swarmDir, { recursive: true });
+    const filePath = path.join(swarmDir, 'embedding-provider.json');
+    let hnswAvailable = false;
+    try {
+      const existing = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+      hnswAvailable = existing.hnswAvailable || false;
+    } catch { /* file not yet created */ }
+    fs.writeFileSync(filePath, JSON.stringify({
+      provider: modelName,
+      dimensions,
+      hnswAvailable,
+      updatedAt: new Date().toISOString()
+    }));
+  } catch { /* non-blocking */ }
+}
+
 /**
  * Lazy load ONNX embedding model
  * Only loads when first embedding is requested
@@ -1530,6 +1549,7 @@ export async function loadEmbeddingModel(options?: {
         tokenizer: null,
         dimensions: bridgeResult.dimensions
       };
+      _writeEmbeddingProviderFile(bridgeResult.modelName, bridgeResult.dimensions);
       return bridgeResult;
     }
   }
@@ -1554,6 +1574,7 @@ export async function loadEmbeddingModel(options?: {
         dimensions: 384 // MiniLM-L6 produces 384-dim vectors
       };
 
+      _writeEmbeddingProviderFile('Xenova/all-MiniLM-L6-v2', 384);
       return {
         success: true,
         dimensions: 384,
@@ -1577,6 +1598,7 @@ export async function loadEmbeddingModel(options?: {
         dimensions: 768
       };
 
+      _writeEmbeddingProviderFile('agentic-flow/reasoningbank', 768);
       return {
         success: true,
         dimensions: 768,
@@ -1610,6 +1632,7 @@ export async function loadEmbeddingModel(options?: {
               tokenizer: null,
               dimensions: probe.length || 384
             };
+            _writeEmbeddingProviderFile('ruvector/onnx', probe.length || 384);
             return {
               success: true,
               dimensions: probe.length || 384,
@@ -1638,6 +1661,7 @@ export async function loadEmbeddingModel(options?: {
         dimensions: 768
       };
 
+      _writeEmbeddingProviderFile('agentic-flow', 768);
       return {
         success: true,
         dimensions: 768,
@@ -1654,6 +1678,7 @@ export async function loadEmbeddingModel(options?: {
       dimensions: 128 // Smaller fallback dimensions
     };
 
+    _writeEmbeddingProviderFile('hash-fallback', 128);
     return {
       success: true,
       dimensions: 128,

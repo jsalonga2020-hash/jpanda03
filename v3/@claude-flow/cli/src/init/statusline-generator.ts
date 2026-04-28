@@ -539,6 +539,19 @@ function getAgentDBStats() {
   return { vectorCount, dbSizeKB: Math.floor(dbSizeKB), namespaces, hasHnsw };
 }
 
+// Embedding provider stats written by 'ruflo memory stats'
+function getEmbeddingProviderStats() {
+  var provPaths = [
+    path.join(CWD, '.swarm', 'embedding-provider.json'),
+    path.join(CWD, '.claude-flow', 'embedding-provider.json'),
+  ];
+  for (var i = 0; i < provPaths.length; i++) {
+    var data = readJSON(provPaths[i]);
+    if (data && data.provider) return data;
+  }
+  return { provider: null, dimensions: 0, hnswAvailable: false, updatedAt: null };
+}
+
 // Test stats (count files only — NO reading file contents)
 function getTestStats() {
   let testFiles = 0;
@@ -639,6 +652,7 @@ function generateStatusline() {
   const tests = getTestStats();
   const session = getSessionStats();
   const integration = getIntegrationStatus();
+  const embedding = getEmbeddingProviderStats();
   const lines = [];
 
   // Header
@@ -761,6 +775,20 @@ function generateStatusline() {
     integStr
   );
 
+  // Line 5: Embeddings (shown only when provider info is available)
+  if (embedding.provider) {
+    const embProvColor = (embedding.provider !== 'none' && embedding.provider !== 'unknown') ? c.brightGreen : c.dim;
+    const embHnswStr = embedding.hnswAvailable ? c.brightGreen + '\\u26A1active' + c.reset : c.dim + 'inactive' + c.reset;
+    const embDimsStr = embedding.dimensions > 0 ? c.brightWhite + String(embedding.dimensions) + '-dim' + c.reset : c.dim + 'N/A' + c.reset;
+    const embAge = embedding.updatedAt ? '  ' + c.dim + '\\u2502' + c.reset + '  ' + c.dim + embedding.updatedAt.slice(0, 10) + c.reset : '';
+    lines.push(
+      c.brightGreen + '\\uD83E\\uDDEC Embeddings' + c.reset + '    ' +
+      c.cyan + 'Provider' + c.reset + ' ' + embProvColor + '\\u25CF' + embedding.provider + c.reset + '  ' + c.dim + '\\u2502' + c.reset + '  ' +
+      c.cyan + 'Dims' + c.reset + ' ' + embDimsStr + '  ' + c.dim + '\\u2502' + c.reset + '  ' +
+      c.cyan + 'HNSW' + c.reset + ' ' + embHnswStr + embAge
+    );
+  }
+
   return lines.join('\\n');
 }
 
@@ -777,6 +805,7 @@ function generateJSON() {
     hooks: getHooksStatus(),
     agentdb: getAgentDBStats(),
     tests: getTestStats(),
+    embedding: getEmbeddingProviderStats(),
     git: { modified: git.modified, untracked: git.untracked, staged: git.staged, ahead: git.ahead, behind: git.behind },
     lastUpdated: new Date().toISOString(),
   };

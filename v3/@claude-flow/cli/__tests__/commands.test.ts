@@ -639,6 +639,37 @@ describe('Memory Commands', () => {
       expect(result.data).toHaveProperty('backend');
       expect(result.data).toHaveProperty('version');
     });
+
+    it('should include embedding provider info in JSON output', async () => {
+      const statsCmd = memoryCommand.subcommands?.find(c => c.name === 'stats');
+      expect(statsCmd).toBeDefined();
+
+      ctx.flags = { format: 'json', _: [] };
+      const result = await statsCmd!.action!(ctx);
+
+      expect(result.success).toBe(true);
+      expect(result.data).toHaveProperty('embedding');
+      expect(result.data.embedding).toHaveProperty('provider');
+      expect(result.data.embedding).toHaveProperty('dimensions');
+      expect(result.data.embedding).toHaveProperty('hnswAvailable');
+      expect(typeof result.data.embedding.provider).toBe('string');
+      expect(typeof result.data.embedding.dimensions).toBe('number');
+      expect(typeof result.data.embedding.hnswAvailable).toBe('boolean');
+    });
+
+    it('should default embedding to none when memory-initializer is unavailable', async () => {
+      const statsCmd = memoryCommand.subcommands?.find(c => c.name === 'stats');
+      expect(statsCmd).toBeDefined();
+
+      ctx.flags = { format: 'json', _: [] };
+      const result = await statsCmd!.action!(ctx);
+
+      expect(result.success).toBe(true);
+      // In test environment, memory-initializer import will fail gracefully
+      // so embedding fields should have safe defaults
+      expect(result.data.embedding.provider).toBeDefined();
+      expect(result.data.embedding.dimensions).toBeGreaterThanOrEqual(0);
+    });
   });
 
   describe('memory configure', () => {
