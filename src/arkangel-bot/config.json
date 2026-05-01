@@ -1,0 +1,7 @@
+{
+  "token": "YOUR_BOT_TOKEN_HERE",
+  "clientId": "YOUR_BOT_CLIENT_ID_HERE",
+  "guildId": "YOUR_GUILD_ID_HERE",
+  "statusChannelId": "YOUR_STATUS_CHANNEL_ID_HERE",
+  "adminRoleId": "YOUR_ADMIN_ROLE_ID_OR_LEAVE_BLANK"
+}

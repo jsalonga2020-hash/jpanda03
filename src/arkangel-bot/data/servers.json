@@ -1,0 +1,32 @@
+{
+  "statusMessageId": null,
+  "alertChannelId": null,
+  "ticketChannelId": null,
+  "alertRoleId": null,
+  "servers": [
+    { "name": "Arkangel Ragnarok Sea",       "url": "https://arkangelsea.com/",              "status": "online", "xkore0": true,  "xkore3": true  },
+    { "name": "BBC Ragnaworld",               "url": "https://www.bbcragnaworld.com/",         "status": "online", "xkore0": true,  "xkore3": true  },
+    { "name": "Project Brunhilde",            "url": "https://panel.brunhilde-classic.com/",   "status": "online", "xkore0": true,  "xkore3": true  },
+    { "name": "Brynhildr HR",                 "url": "https://www.brynhildr-ro.com/",          "status": "online", "xkore0": true,  "xkore3": true  },
+    { "name": "Chaos Era",                    "url": "https://www.play-chaosera.com/",         "status": "online", "xkore0": true,  "xkore3": true  },
+    { "name": "Divine Armaments RO",          "url": "https://www.divine-armaments.net/",      "status": "online", "xkore0": true,  "xkore3": true  },
+    { "name": "GenesisRO",                    "url": "https://genesis-ragnarok.com/",          "status": "online", "xkore0": true,  "xkore3": true  },
+    { "name": "Goldtimes RO",                 "url": "https://www.gtro.com.br/",               "status": "online", "xkore0": true,  "xkore3": true  },
+    { "name": "Grand Era Ragnarok",           "url": "https://granderaragnarok.ovh/",          "status": "online", "xkore0": true,  "xkore3": true  },
+    { "name": "JetRO",                        "url": "https://www.jetroserver.com/",           "status": "online", "xkore0": true,  "xkore3": true  },
+    { "name": "Kingdom of Midgard",           "url": "https://www.kingdomofmidgard.gg/",       "status": "online", "xkore0": true,  "xkore3": true  },
+    { "name": "PlayRO Prontera Story Classic","url": "https://playro.gg/",                     "status": "online", "xkore0": true,  "xkore3": true  },
+    { "name": "Record of Ragnarok",           "url": "https://playror.com/",                   "status": "online", "xkore0": true,  "xkore3": true  },
+    { "name": "Poring World",                 "url": "https://cp.pw-community.com/",           "status": "offline","xkore0": false, "xkore3": false },
+    { "name": "PrimaryRO",                    "url": "https://primaryro.com/new-cp/",          "status": "online", "xkore0": true,  "xkore3": true  },
+    { "name": "SiegefriedRO",                 "url": "https://rosiegfried.com/",               "status": "online", "xkore0": true,  "xkore3": true  },
+    { "name": "True MMO",                     "url": "https://truemmo.com.br/",                "status": "online", "xkore0": true,  "xkore3": true  },
+    { "name": "Realms Ragna Asia",            "url": "https://realmsragna.asia/",              "status": "online", "xkore0": true,  "xkore3": true  },
+    { "name": "Retro Revamp",                 "url": "https://retrorevamp.net/",               "status": "online", "xkore0": true,  "xkore3": true  },
+    { "name": "Rok On PH",                    "url": "https://www.rokonph.net/",               "status": "online", "xkore0": true,  "xkore3": true  },
+    { "name": "The Good Old Days",            "url": "https://www.thegodro.com/",              "status": "online", "xkore0": true,  "xkore3": true  },
+    { "name": "UaRO",                         "url": "https://uaro.net/",                      "status": "online", "xkore0": true,  "xkore3": true  },
+    { "name": "WarzoneRO",                    "url": "https://warzone-ro.online/",             "status": "online", "xkore0": true,  "xkore3": true  },
+    { "name": "YggdrasilRO",                  "url": "https://yggdrasilro.com/",               "status": "online", "xkore0": true,  "xkore3": true  }
+  ]
+}

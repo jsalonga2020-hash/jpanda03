@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ragnarok Bot and Blackmarket — Admin Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #161b22;
+      border-bottom: 1px solid #30363d;
+      padding: 18px 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    header h1 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #f0f6fc;
+    }
+
+    header .dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #3fb950;
+      box-shadow: 0 0 6px #3fb950;
+    }
+
+    .container { padding: 32px; max-width: 960px; margin: 0 auto; }
+
+    .legend {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 24px;
+      font-size: 0.85rem;
+      color: #8b949e;
+    }
+
+    .legend span { display: flex; align-items: center; gap: 6px; }
+
+    .badge {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border-radius: 3px;
+    }
+
+    .badge.green  { background: #3fb950; }
+    .badge.red    { background: #f85149; }
+    .badge.yellow { background: #d29922; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #161b22;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #30363d;
+    }
+
+    thead {
+      background: #1c2128;
+    }
+
+    th {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #8b949e;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border-bottom: 1px solid #30363d;
+    }
+
+    td {
+      padding: 13px 16px;
+      font-size: 0.9rem;
+      border-bottom: 1px solid #21262d;
+      vertical-align: middle;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #1c2128; }
+
+    td a {
+      color: #58a6ff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    td a:hover { text-decoration: underline; }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .pill-online      { background: #0d2b0d; color: #3fb950; border: 1px solid #238636; }
+    .pill-offline     { background: #2d0f0f; color: #f85149; border: 1px solid #da3633; }
+    .pill-maintenance { background: #2b1d00; color: #d29922; border: 1px solid #9e6a03; }
+
+    .svc {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px; height: 22px;
+      border-radius: 5px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .svc-on  { background: #238636; color: #fff; }
+    .svc-off { background: #333; color: #666; }
+
+    .footer {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #484f58;
+    }
+
+    #last-refresh { color: #6e7681; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="dot" id="bot-dot"></div>
+  <h1>📡 Ragnarok Bot and Blackmarket — Admin Dashboard</h1>
+</header>
+
+<div class="container">
+  <div class="legend">
+    <span><span class="badge green"></span> Working</span>
+    <span><span class="badge red"></span> Needs Update</span>
+    <span><span class="badge yellow"></span> Maintenance</span>
+    <span style="margin-left:auto" id="last-refresh">Loading...</span>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Server</th>
+        <th>Status</th>
+        <th style="text-align:center">Xkore 0</th>
+        <th style="text-align:center">Xkore 3</th>
+      </tr>
+    </thead>
+    <tbody id="server-table">
+      <tr><td colspan="4" style="text-align:center;color:#484f58;padding:32px">Loading...</td></tr>
+    </tbody>
+  </table>
+
+  <div class="footer">Auto-refreshes every 30 seconds · Data from servers.json</div>
+</div>
+
+<script>
+  function renderTable(servers) {
+    const tbody = document.getElementById('server-table');
+    tbody.innerHTML = servers.map(s => {
+      const pill = s.status === 'online'
+        ? `<span class="status-pill pill-online">🟩 Online</span>`
+        : s.status === 'offline'
+        ? `<span class="status-pill pill-offline">🟥 Offline</span>`
+        : `<span class="status-pill pill-maintenance">🟨 Maintenance</span>`;
+
+      const svc = (available) =>
+        available
+          ? `<span class="svc svc-on">✓</span>`
+          : `<span class="svc svc-off">—</span>`;
+
+      const showSvc = s.status !== 'offline';
+
+      return `
+        <tr>
+          <td><a href="${s.url}" target="_blank" rel="noopener">${s.name}</a></td>
+          <td>${pill}</td>
+          <td style="text-align:center">${showSvc ? svc(s.xkore0) : '<span class="svc svc-off">—</span>'}</td>
+          <td style="text-align:center">${showSvc ? svc(s.xkore3) : '<span class="svc svc-off">—</span>'}</td>
+        </tr>`;
+    }).join('');
+  }
+
+  async function refresh() {
+    try {
+      const res = await fetch('/api/status');
+      const data = await res.json();
+      renderTable(data.servers);
+      document.getElementById('last-refresh').textContent =
+        'Refreshed at ' + new Date().toLocaleTimeString();
+    } catch {
+      document.getElementById('last-refresh').textContent = '⚠️ Could not fetch data';
+    }
+  }
+
+  refresh();
+  setInterval(refresh, 30000);
+</script>
+
+</body>
+</html>
